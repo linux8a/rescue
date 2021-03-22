@@ -1,0 +1,33 @@
+#############################################################
+#############################################################
+### Script automatizados set  rescue                      ###
+###  Create linux8a :)                                    ###
+###  mail: linux8a@gmail.com                              ###
+###  argenis8agonzalez@gmail.com                          ###
+###                                                       ###
+#############################################################
+#############################################################
+
+---
+- name: Set rescue to server
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  user: root
+  vars:
+    hcloud_token: YOU Tocken
+    server_name: ubuntu-1  
+  tasks:
+    - name: Ensure the server is will be booted in rescue mode and therefore restarted
+      hcloud_server:
+          api_token: "{{ hcloud_token }}"
+          name: "{{ server_name }}"
+          rescue_mode: linux64
+          ssh_keys:
+            - linux
+          state: restarted
+      register: output
+
+    - name: "Ensure the server is will be booted in rescue mode and therefore restarted"
+      debug:
+        var: output

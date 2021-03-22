@@ -1,0 +1,39 @@
+#############################################################
+#############################################################
+### Script automatizados instalar rescue                  ###
+###  Create linux8a :)                                    ###
+###  mail: linux8a@gmail.com                              ###
+###  argenis8agonzalez@gmail.com                          ###
+###                                                       ###
+#############################################################
+#############################################################
+
+---
+- hosts: rescue
+  vars:
+    hostname: host.examples.com 
+  tasks:
+    - name: Configurar el servicio SSH del servidor (Debian)
+      template:
+        src: ./templates/install-image-setup.j2
+        dest: /tmp/setup.conf
+    
+    - name: Copy
+      copy:
+        src: ./sript/post-install_rescue_hetzner.sh
+        dest: /tmp/post-install_rescue_hetzner.sh
+        mode: '0755'
+
+    # - git:
+    #     repo: https://github.com/linux8a/rescue.git
+    #     dest: /tmp/rescue
+    
+    - name: Run install
+      shell: /root/.oldroot/nfs/install/installimage -a -c /tmp/setup.conf -x /tmp/post-install_rescue_hetzner.sh
+
+    - name: Reboot 
+      reboot:
+        # reboot_timeout: 3600
+
+ 
+      

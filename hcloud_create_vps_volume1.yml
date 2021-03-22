@@ -1,0 +1,34 @@
+##################################################
+##################################################
+### Script automatizados hcloud               ###
+###  Create linux8a :)                         ###
+###  mail: linux8a@gmail.com                   ###
+###  argenis8agonzalez@gmail.com               ###
+###   Ojo: install this pip install hcloud     ###
+##################################################
+##################################################
+
+---
+- name: Create a Server and a Volume with server
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  user: root
+  vars:
+    hcloud_token: YOUR_API_TOKEN
+  tasks:
+    - name: Create a basic server
+      hcloud_server:
+          api_token: "{{ hcloud_token }}"
+          name: my-server
+          server_type: cx11
+          image: ubuntu-20.04
+          state: present
+      register: server
+    - name: Create a volume
+      hcloud_volume:
+          api_token: "{{ hcloud_token }}"
+          name: my-volume
+          size: 10
+          server: "{{ server.hcloud_server.name }}"
+          state: present
